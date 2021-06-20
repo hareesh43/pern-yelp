@@ -6,11 +6,14 @@ const db = require("./db");
 const app = express();
 
 // middleware
-app.use(cors());
+
 app.use(express.json());
+
+app.use(cors());
 
 // get Restaurants
 app.get("/api/v1/restaurants", async (req, res) => {
+ 
   const query = "select * from restaurants";
   try {
     const result = await db.query(query);
