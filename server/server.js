@@ -1,10 +1,12 @@
 const express = require("express");
 require("dotenv").config();
+const cors = require("cors");
 const db = require("./db");
 
 const app = express();
 
 // middleware
+app.use(cors());
 app.use(express.json());
 
 // get Restaurants
@@ -36,7 +38,6 @@ app.get("/api/v1/restaurants/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-
 });
 
 // add  Restaurants
