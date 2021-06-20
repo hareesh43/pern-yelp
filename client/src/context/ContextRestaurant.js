@@ -1,6 +1,6 @@
 import React, { useState, createContext } from "react";
 
-const ContextRestaurant = createContext();
+export const ContextRestaurant = createContext();
 
 export const ContextRestaurantProvider = ({ children }) => {
   const [restaurants, setRestaurants] = useState([]);

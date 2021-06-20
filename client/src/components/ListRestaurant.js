@@ -1,11 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import RestaurantApi from "../Api/RestaurantApi";
+import { ContextRestaurant } from "../context/ContextRestaurant";
 
 export default function ListRestaurant() {
-  useEffect(async () => {
+
+  const {restaurants, setRestaurants} = useContext(ContextRestaurant);
+
+  const fetchData = async () => {
+    const response = await RestaurantApi.get("/");
+    setRestaurants(response.data.data);
+  };
+
+  useEffect(() => {
     try {
-      const response = await RestaurantApi.get("/");
-      console.log(response);
+      fetchData();
     } catch (error) {}
   }, []);
 
