@@ -3,11 +3,12 @@ import RestaurantApi from "../Api/RestaurantApi";
 import { ContextRestaurant } from "../context/ContextRestaurant";
 
 export default function ListRestaurant() {
+  const { restaurants, setRestaurants } = useContext(ContextRestaurant);
 
-  const {restaurants, setRestaurants} = useContext(ContextRestaurant);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchData = async () => {
     const response = await RestaurantApi.get("/");
+    console.log(response.data.data);
     setRestaurants(response.data.data);
   };
 
@@ -32,19 +33,23 @@ export default function ListRestaurant() {
           </tr>
         </thead>
         <tbody className="bg-dark text-white">
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>$$</td>
-            <td>
-              <button className="btn btn-warning">Edit</button>
-            </td>
-            <td>
-              <button className="btn btn-danger">Delete</button>
-            </td>
-          </tr>
+          {restaurants.map((val) => (
+            <tr>
+              <th key={val.id} scope="row">
+                {val.id}
+              </th>
+              <td>{val.name}</td>
+              <td>{val.location}</td>
+              <td>{"$".repeat(val.price_range)}</td>
+              <td>**</td>
+              <td>
+                <button className="btn btn-warning">Edit</button>
+              </td>
+              <td>
+                <button className="btn btn-danger">Delete</button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
