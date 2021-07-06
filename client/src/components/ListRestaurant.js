@@ -1,9 +1,11 @@
 import React, { useContext, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import RestaurantApi from "../Api/RestaurantApi";
 import { ContextRestaurant } from "../context/ContextRestaurant";
 
 export default function ListRestaurant() {
   const { restaurants, setRestaurants } = useContext(ContextRestaurant);
+  const history = useHistory();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchData = async () => {
@@ -18,12 +20,23 @@ export default function ListRestaurant() {
     } catch (error) {}
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await RestaurantApi.delete(`/${id}`);
+      console.log(response);
+      setRestaurants(restaurants.filter((r) => r.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleEdit = (id) => {
+    history.push(`/restaurant/${id}/update`);
+  };
   return (
     <div>
       <table className="table  table-hover">
         <thead className="bg-info text-white">
           <tr>
-            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Location</th>
             <th scope="col">Price Range</th>
@@ -33,23 +46,31 @@ export default function ListRestaurant() {
           </tr>
         </thead>
         <tbody className="bg-dark text-white">
-          {restaurants.map((val) => (
-            <tr>
-              <th key={val.id} scope="row">
-                {val.id}
-              </th>
-              <td>{val.name}</td>
-              <td>{val.location}</td>
-              <td>{"$".repeat(val.price_range)}</td>
-              <td>**</td>
-              <td>
-                <button className="btn btn-warning">Edit</button>
-              </td>
-              <td>
-                <button className="btn btn-danger">Delete</button>
-              </td>
-            </tr>
-          ))}
+          {restaurants &&
+            restaurants.map((val) => (
+              <tr key={val.id}>
+                <td>{val.name}</td>
+                <td>{val.location}</td>
+                <td>{"$".repeat(val.price_range)}</td>
+                <td>**</td>
+                <td>
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => handleEdit(val.id)}
+                  >
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(val.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
