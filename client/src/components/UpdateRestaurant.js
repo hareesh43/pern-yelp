@@ -13,11 +13,15 @@ export default function UpdateRestaurant() {
   const [priceRange, setPriceRange] = useState("");
 
   const getRestaurant = async () => {
-    const response = await RestaurantApi.get(`/${id}`);
-    const { name, location, price_range } = response.data.data;
-    setName(name);
-    setLocation(location);
-    setPriceRange(price_range);
+    try {
+      const response = await RestaurantApi.get(`/${id}`);
+      const { name, location, price_range } = response.data.data;
+      setName(name);
+      setLocation(location);
+      setPriceRange(price_range);
+    } catch (error) {
+      console.error(error);
+    }
   };
   useEffect(() => {
     getRestaurant();

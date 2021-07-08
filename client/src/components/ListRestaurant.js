@@ -20,7 +20,8 @@ export default function ListRestaurant() {
     } catch (error) {}
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (e,id) => {
+    e.stopPropagation();
     try {
       const response = await RestaurantApi.delete(`/${id}`);
       console.log(response);
@@ -29,9 +30,13 @@ export default function ListRestaurant() {
       console.error(error);
     }
   };
-  const handleEdit = (id) => {
+  const handleEdit = (e,id) => {
+    e.stopPropagation();
     history.push(`/restaurant/${id}/update`);
   };
+  const handleSelect = (id)=>{
+    history.push(`/restaurant/${id}/details`);
+  }
   return (
     <div>
       <table className="table  table-hover">
@@ -48,7 +53,7 @@ export default function ListRestaurant() {
         <tbody className="bg-dark text-white">
           {restaurants &&
             restaurants.map((val) => (
-              <tr key={val.id}>
+              <tr key={val.id} onClick = {()=>handleSelect(val.id)}>
                 <td>{val.name}</td>
                 <td>{val.location}</td>
                 <td>{"$".repeat(val.price_range)}</td>
@@ -56,7 +61,7 @@ export default function ListRestaurant() {
                 <td>
                   <button
                     className="btn btn-warning"
-                    onClick={() => handleEdit(val.id)}
+                    onClick={(e) => handleEdit(e,val.id)}
                   >
                     Edit
                   </button>
@@ -64,7 +69,7 @@ export default function ListRestaurant() {
                 <td>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDelete(val.id)}
+                    onClick={(e) => handleDelete(e,val.id)}
                   >
                     Delete
                   </button>
