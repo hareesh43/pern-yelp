@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import RestaurantApi from "../Api/RestaurantApi";
+import RatingForm from "../components/RatingForm";
+import Review from "../components/Review";
+import StarRating from "../components/StarRating";
 import { ContextRestaurant } from "../context/ContextRestaurant";
 
 export default function Details() {
@@ -12,7 +15,7 @@ export default function Details() {
   const getRestaurant = async () => {
     try {
       const response = await RestaurantApi.get(`/${id}`);
-
+      console.log(response);
       setselectedRestaurant(response.data.data);
     } catch (error) {
       console.error(error);
@@ -25,7 +28,14 @@ export default function Details() {
   return (
     <>
       <h1 className="text-center">
-        {selectedRestaurant && selectedRestaurant.name}
+        {selectedRestaurant && (
+          <>
+            <div className="mt-2">
+              <Review selectedRestaurant = {selectedRestaurant.reviews}/>
+              <RatingForm />
+            </div>
+          </>
+        )}
       </h1>
     </>
   );

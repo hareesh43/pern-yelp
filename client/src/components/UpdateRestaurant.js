@@ -15,7 +15,7 @@ export default function UpdateRestaurant() {
   const getRestaurant = async () => {
     try {
       const response = await RestaurantApi.get(`/${id}`);
-      const { name, location, price_range } = response.data.data;
+      const { name, location, price_range } = response.data.data.restaurant;
       setName(name);
       setLocation(location);
       setPriceRange(price_range);
