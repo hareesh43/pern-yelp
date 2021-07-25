@@ -15,7 +15,6 @@ export default function Details() {
   const getRestaurant = async () => {
     try {
       const response = await RestaurantApi.get(`/${id}`);
-      console.log(response);
       setselectedRestaurant(response.data.data);
     } catch (error) {
       console.error(error);
@@ -25,18 +24,35 @@ export default function Details() {
     getRestaurant();
   }, []);
 
+  const handleRating = (rating, reviewCount) => {
+    if (!rating) {
+      return <span>0 Review</span>;
+    }
+    return (
+      <>
+        <StarRating rating={rating} />
+        <span>({reviewCount})</span>
+      </>
+    );
+  };
+
   return (
     <>
-      <h1 className="text-center">
-        {selectedRestaurant && (
-          <>
-            <div className="mt-2">
-              <Review selectedRestaurant = {selectedRestaurant.reviews}/>
-              <RatingForm />
-            </div>
-          </>
-        )}
-      </h1>
+      {selectedRestaurant && (
+        <>
+          <h1 className="text-center">{selectedRestaurant.restaurant.name}</h1>
+          <div className="text-center">
+            {handleRating(
+              selectedRestaurant.restaurant.average_rating,
+              selectedRestaurant.restaurant.review_count
+            )}
+          </div>
+          <div className="mt-2">
+            <Review reviews={selectedRestaurant.reviews} />
+            <RatingForm />
+          </div>
+        </>
+      )}
     </>
   );
 }
